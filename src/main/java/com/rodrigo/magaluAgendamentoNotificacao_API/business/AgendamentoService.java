@@ -5,6 +5,7 @@ package com.rodrigo.magaluAgendamentoNotificacao_API.business;
 import com.rodrigo.magaluAgendamentoNotificacao_API.business.mapper.IAgendamentoMapper;
 import com.rodrigo.magaluAgendamentoNotificacao_API.controller.dto.in.AgendamentoRecord;
 import com.rodrigo.magaluAgendamentoNotificacao_API.controller.dto.out.AgendamentoRecordOut;
+import com.rodrigo.magaluAgendamentoNotificacao_API.infrastructure.entities.Agendamento;
 import com.rodrigo.magaluAgendamentoNotificacao_API.infrastructure.exception.NotFoundException;
 import com.rodrigo.magaluAgendamentoNotificacao_API.infrastructure.repositoris.AgendamentoRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,12 @@ public class AgendamentoService {
     public AgendamentoRecordOut buscarAgendamentoPorId(Long id){
         return agendamentoMapper.paraOut(repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Id não encontrado")));
+    }
+
+    public void canelarAgendamento(Long id){
+        Agendamento agendamento = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Id não encontrado"));
+        repository.save(agendamentoMapper.paraEntityCancelamento(agendamento));
     }
 
 }
